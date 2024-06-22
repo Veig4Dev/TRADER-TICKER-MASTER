@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  backend:
+    build: ./API_TRADER
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./API_TRADER:/usr/src/app  # Ajuste o volume conforme necessário
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./FRONT-TRADER
+    command: npm start
+    volumes:
+      - ./FRONT-TRADER:/app  # Ajuste o volume conforme necessário
+    ports:
+      - "3000:3000"
+

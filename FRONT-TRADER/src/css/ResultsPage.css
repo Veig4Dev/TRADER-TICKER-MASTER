@@ -1,0 +1,17 @@
+.results-page {
+  padding: 20px;
+}
+
+.results-page h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.results-page p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.results-page .chart {
+  margin-top: 20px;
+}
