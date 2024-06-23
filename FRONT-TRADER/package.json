@@ -1,5 +1,5 @@
 {
-  "name": "stock-ticker-search",
+  "name": "trader-ticker-front",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

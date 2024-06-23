@@ -5,7 +5,7 @@ services:
     build: ./API-TRADER-TICKER
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./API_TRADER:/usr/src/app  # Ajuste o volume conforme necessário
+      - ./API-TRADER-TICKER/app/:/app/  # Ajuste o volume conforme necessário
     ports:
       - "8000:8000"
 
