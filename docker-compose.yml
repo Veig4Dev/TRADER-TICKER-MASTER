@@ -2,7 +2,7 @@ version: "3"
 
 services:
   backend:
-    build: ./API_TRADER
+    build: ./API-TRADER-TICKER
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./API_TRADER:/usr/src/app  # Ajuste o volume conforme necessário
