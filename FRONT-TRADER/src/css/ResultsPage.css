@@ -1,17 +1,41 @@
+/* src/css/ResultsPage.css */
 .results-page {
+  display: flex;
+  justify-content: center;
   padding: 20px;
 }
 
-.results-page h1 {
-  font-size: 24px;
+.main-content {
+  flex: 7;
+  padding: 0 15px;
+}
+
+.ads {
+  flex: 1.5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 15px;
+}
+
+.chart {
+  margin-bottom: 30px;
+}
+
+.chart h2 {
+  font-size: 1.5em;
   margin-bottom: 10px;
 }
 
-.results-page p {
-  font-size: 16px;
-  margin-bottom: 20px;
+.chart-container {
+  overflow-x: auto;
 }
 
-.results-page .chart {
-  margin-top: 20px;
+.ad {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  text-align: center;
+  width: 100%;
 }

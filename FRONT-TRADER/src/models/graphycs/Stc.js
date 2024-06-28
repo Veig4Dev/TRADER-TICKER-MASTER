@@ -1,6 +1,6 @@
 // src/models/graphycs/Stc.js
 
-class Stc {
+export class Stc {
   constructor(stc, dates) {
     this.stc = stc;
     this.dates = dates;

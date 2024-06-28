@@ -1,6 +1,6 @@
 // src/models/graphycs/Adx.js
 
-class Adx {
+export class Adx {
   constructor(pos, neg, dates) {
     this.pos = pos;
     this.neg = neg;

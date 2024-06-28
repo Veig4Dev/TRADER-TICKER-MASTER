@@ -1,6 +1,6 @@
 // src/models/graphycs/Bollinger.js
 
-class Bollinger {
+export class Bollinger {
   constructor(hband_struct, hband_indicator, lband_struct, lband_indicator, dates) {
     this.hband_struct = hband_struct;
     this.hband_indicator = hband_indicator;

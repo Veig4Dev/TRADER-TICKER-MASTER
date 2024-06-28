@@ -1,8 +1,8 @@
 // src/models/graphycs/Kama.js
 
-class Kama {
-  constructor(struct, dates) {
-    this.struct = struct;
+export class Kama {
+  constructor(kama, dates) {
+    this.kama = kama;
     this.dates = dates;
   }
 }
