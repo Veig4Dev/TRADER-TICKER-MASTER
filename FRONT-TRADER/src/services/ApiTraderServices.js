@@ -5,8 +5,8 @@ const BASE_URL = 'http://localhost:8000/api';  // Altere conforme a URL da sua A
 
 const ApiTraderServices = {
   fetchIndicator: async (indicator, ticker, startDate, endDate) => {
-    // const url = `${BASE_URL}/${indicator}/?ticker=${ticker}&datainicio=${startDate}&datafim=${endDate}`;
-    const url = `${BASE_URL}/${indicator}/?ticker=PETR3.SA&datainicio=2024-01-01&datafim=2024-06-22`;
+    const url = `${BASE_URL}/${indicator}/?ticker=${ticker}&datainicio=${startDate}&datafim=${endDate}`;
+    // const url = `${BASE_URL}/${indicator}/?ticker=PETR3.SA&datainicio=2024-01-01&datafim=2024-06-22`;
 
     console.log('Fetching data from URL:', url);
     try {
