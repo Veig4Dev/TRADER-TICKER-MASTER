@@ -1,4 +1,3 @@
-// src/pages/ResultsPage.js
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Line } from 'react-chartjs-2';
@@ -11,40 +10,41 @@ Chart.register(CategoryScale, LineElement, PointElement, LineController, LinearS
 const ResultsPage = () => {
   const location = useLocation();
   const { ticker, startDate, endDate } = location.state;
-  const [macdData, setMacdData] = useState(null);
-  const [adxData, setAdxData] = useState(null);
-  const [aroonData, setAroonData] = useState(null);
-  const [awesomeData, setAwesomeData] = useState(null);
-  const [kamaData, setKamaData] = useState(null);
-
-
-
+  const [indicatorData, setIndicatorData] = useState({});
   const [error, setError] = useState(null);
+  const [selectedIndicators, setSelectedIndicators] = useState({
+    macd: true,
+    adx: true,
+    aroon: true,
+    awesome: true,
+    kama: true,
+    bollinger: true,
+    tsi: true,
+    rsi: true,
+    stc: true,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const macdResult = await ApiTraderServices.fetchIndicator('macd', ticker, startDate, endDate);
-        setMacdData(macdResult);
-
-        const adxResult = await ApiTraderServices.fetchIndicator('adx', ticker, startDate, endDate);
-        setAdxData(adxResult);
-
-        const aroonResult = await ApiTraderServices.fetchIndicator('aroon', ticker, startDate, endDate);
-        setAroonData(aroonResult)
-
-        const awesomeResult = await ApiTraderServices.fetchIndicator('awesome', ticker, startDate, endDate);
-        setAwesomeData(awesomeResult);
-        
-        const kamaResult = await ApiTraderServices.fetchIndicator('kama', ticker, startDate, endDate);
-        setKamaData(kamaResult);
-
+        const indicators = ['macd', 'adx', 'aroon', 'awesome', 'kama', 'bollinger', 'tsi', 'rsi', 'stc'];
+        const data = await Promise.all(
+          indicators.map(async (indicator) => {
+            const result = await ApiTraderServices.fetchIndicator(indicator, ticker, startDate, endDate);
+            return { [indicator]: result };
+          })
+        );
+        setIndicatorData(Object.assign({}, ...data));
       } catch (error) {
         setError(error.message);
       }
     };
     fetchData();
   }, [ticker, startDate, endDate]);
+
+  const handleIndicatorChange = (indicator) => {
+    setSelectedIndicators((prev) => ({ ...prev, [indicator]: !prev[indicator] }));
+  };
 
   if (error) {
     return <p>{error}</p>;
@@ -85,47 +85,94 @@ const ResultsPage = () => {
       <div className="main-content">
         <h1>{ticker}</h1>
         <p>Período: {startDate} a {endDate}</p>
-        {macdData && renderChart(
+        <div className="indicators-selection">
+          {Object.keys(selectedIndicators).map((indicator) => (
+            <label key={indicator}>
+              <input
+                type="checkbox"
+                checked={selectedIndicators[indicator]}
+                onChange={() => handleIndicatorChange(indicator)}
+              />
+              {indicator.toUpperCase()}
+            </label>
+          ))}
+        </div>
+        {selectedIndicators.macd && indicatorData.macd && renderChart(
           'Gráfico do Indicador MACD',
-          [macdData.macd, macdData.signal],
-          macdData.dates,
+          [indicatorData.macd.macd, indicatorData.macd.signal],
+          indicatorData.macd.dates,
           [
-            { label: 'MACD', borderColor: 'rgb(75, 192, 192)', fill: false, tension: 0.1 },
-            { label: 'Signal', borderColor: 'rgb(192, 75, 192)', fill: false, tension: 0.1 },
+            { label: 'MACD', borderColor: 'rgb(75, 192, 192)' },
+            { label: 'Signal', borderColor: 'rgb(192, 75, 192)' },
           ]
         )}
-        {adxData && renderChart(
+        {selectedIndicators.adx && indicatorData.adx && renderChart(
           'Gráfico do Indicador ADX',
-          [adxData.pos, adxData.neg],
-          adxData.dates,
+          [indicatorData.adx.pos, indicatorData.adx.neg],
+          indicatorData.adx.dates,
           [
-            { label: 'POS', borderColor: 'rgb(75, 192, 192)', fill: false, tension: 0.1 },
-            { label: 'NEG', borderColor: 'rgb(192, 75, 192)', fill: false, tension: 0.1 },
+            { label: 'POS', borderColor: 'rgb(75, 192, 192)' },
+            { label: 'NEG', borderColor: 'rgb(192, 75, 192)' },
           ]
         )}
-        {aroonData && renderChart(
+        {selectedIndicators.aroon && indicatorData.aroon && renderChart(
           'Gráfico do Indicador AROON',
-          [aroonData.aroon_up, aroonData.aroon_up],
-          aroonData.dates,
+          [indicatorData.aroon.aroon_up, indicatorData.aroon.aroon_down],
+          indicatorData.aroon.dates,
           [
-            { label: 'UP', borderColor: 'rgb(75, 192, 192)', fill: false, tension: 0.1 },
-            { label: 'DOWN', borderColor: 'rgb(192, 75, 192)', fill: false, tension: 0.1 },
+            { label: 'UP', borderColor: 'rgb(75, 192, 192)' },
+            { label: 'DOWN', borderColor: 'rgb(192, 75, 192)' },
           ]
         )}
-        {awesomeData && renderChart(
+        {selectedIndicators.awesome && indicatorData.awesome && renderChart(
           'Gráfico do Indicador AWESOME',
-          [awesomeData.awesome],
-          awesomeData.dates,
+          [indicatorData.awesome.awesome],
+          indicatorData.awesome.dates,
           [
-            { label: 'AWESOME', borderColor: 'rgb(10, 192, 20)', fill: false, tension: 0.1 },
+            { label: 'AWESOME', borderColor: 'rgb(10, 192, 20)' },
           ]
         )}
-         {kamaData && renderChart(
+        {selectedIndicators.kama && indicatorData.kama && renderChart(
           'Gráfico do Indicador KAMA',
-          [kamaData.kama],
-          kamaData.dates,
+          [indicatorData.kama.kama],
+          indicatorData.kama.dates,
           [
-            { label: 'KAMA', borderColor: 'rgb(10, 192, 20)', fill: false, tension: 0.1 },
+            { label: 'KAMA', borderColor: 'rgb(10, 192, 20)' },
+          ]
+        )}
+        {selectedIndicators.bollinger && indicatorData.bollinger && renderChart(
+          'Gráfico do Indicador Bollinger',
+          [indicatorData.bollinger.hband_struct, indicatorData.bollinger.hband_indicator, indicatorData.bollinger.lband_struct, indicatorData.bollinger.lband_indicator],
+          indicatorData.bollinger.dates,
+          [
+            { label: 'HBAND_STRUCT', borderColor: 'rgb(10, 192, 20)' },
+            { label: 'HBAND_INDICATOR', borderColor: 'rgb(192, 75, 192)' },
+            { label: 'LBAND_INDICATOR', borderColor: 'rgb(892, 10, 400)' },
+            { label: 'LBAND_STRUCT', borderColor: 'rgb(092, 400, 2)' },
+          ]
+        )}
+        {selectedIndicators.tsi && indicatorData.tsi && renderChart(
+          'Gráfico do Indicador TSI',
+          [indicatorData.tsi.tsi],
+          indicatorData.tsi.dates,
+          [
+            { label: 'TSI', borderColor: 'rgb(10, 192, 20)' },
+          ]
+        )}
+        {selectedIndicators.rsi && indicatorData.rsi && renderChart(
+          'Gráfico do Indicador RSI',
+          [indicatorData.rsi.rsi],
+          indicatorData.rsi.dates,
+          [
+            { label: 'RSI', borderColor: 'rgb(10, 192, 20)' },
+          ]
+        )}
+        {selectedIndicators.stc && indicatorData.stc && renderChart(
+          'Gráfico do Indicador STC',
+          [indicatorData.stc.stc],
+          indicatorData.stc.dates,
+          [
+            { label: 'STC', borderColor: 'rgb(10, 192, 20)' },
           ]
         )}
       </div>
