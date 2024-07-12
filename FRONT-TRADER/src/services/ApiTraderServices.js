@@ -3,6 +3,8 @@ import { transformData } from '../utils/transformData';
 
 const BASE_URL = 'http://localhost:8000/api';  // Altere conforme a URL da sua API
 
+const staticTickers = ['PETR3.SA', 'VALE3.SA', 'ITUB4.SA', 'BBAS3.SA', 'BBDC4.SA', 'ABEV3.SA', 'BRFS3.SA', 'ELET3.SA', 'MGLU3.SA', 'WEGE3.SA'];
+
 const ApiTraderServices = {
   fetchIndicator: async (indicator, ticker, startDate, endDate) => {
     const url = `${BASE_URL}/${indicator}/?ticker=${ticker}&datainicio=${startDate}&datafim=${endDate}`;
@@ -17,6 +19,10 @@ const ApiTraderServices = {
     } catch (error) {
       throw new Error(`Erro ao buscar dados de ${indicator}: ${error.message}`);
     }
+  },
+
+ getSuggestions: (query) => {
+    return staticTickers.filter(ticker => ticker.toLowerCase().includes(query.toLowerCase()));
   }
 };
 
